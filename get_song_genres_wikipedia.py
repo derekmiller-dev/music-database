@@ -21,26 +21,26 @@ df = pd.read_excel("billboard_chart_hot_100_every_song.xlsx")
 def search_wikipedia(artist, title):
     # query = f"{title} {artist}"
     query = f"{artist} {title}"
-    words = re.findall(r"[a-zA-Z]+", str(title).lower())
+    words_of_song = re.findall(r"[a-zA-Z]+", str(title).lower())
     found_index = False
     current_index = None
 
     try:
-        results = wikipedia.search(query, results=20)
-        for i, item in enumerate(results):
-            item = str(item).lower()
-            # print(all(word in item for word in words))
-            if all(word in item for word in words):       
-                if "song" in str(item).lower():
-                    print(f"Query: {query} → Top Result: {results[i]}")
+        search_results = wikipedia.search(query, results=20)
+        for i, item in enumerate(search_results):
+            words_of_search_result = str(item).lower()
+            # print(all(word in item for word in words_of_song))
+            if all(word in words_of_search_result for word in words_of_song):       
+                if "song" in str(words_of_search_result).lower():
+                    print(f"Query: {query} → Top Result: {search_results[i]}")
                     found_index = True
-                    return build_wikipedia_url(results[i])
+                    return build_wikipedia_url(search_results[i])
                 elif current_index == None:
                     current_index = i
         
         if found_index == False and current_index != None:
-            print(f"Query: {query} → Top Result: {results[current_index]}")
-            return build_wikipedia_url(results[current_index])
+            print(f"Query: {query} → Top Result: {search_results[current_index]}")
+            return build_wikipedia_url(search_results[current_index])
             
     except Exception as e:
         print(f"Error for query '{query}': {e}")
